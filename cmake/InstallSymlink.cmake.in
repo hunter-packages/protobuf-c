@@ -1,0 +1,4 @@
+message(STATUS "Installing protoc-c symlink")
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E create_symlink protoc-gen-c protoc-c
+  WORKING_DIRECTORY @CMAKE_INSTALL_PREFIX@/bin)
