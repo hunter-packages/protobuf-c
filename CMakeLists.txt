@@ -1,17 +1,13 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-set(PACKAGE protobuf-c)
-set(PACKAGE_NAME protobuf-c)
-set(PACKAGE_VERSION 1.3.0)
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(HunterGate)
 HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.20.21.tar.gz"
-    SHA1 "36bc6c263eb173697724e00adac8add4b3e52a31"
+    URL "https://github.com/ruslo/hunter/archive/v0.20.77.tar.gz"
+    SHA1 "3afa578a16b2998e2338d7d6ccfbec9c7027fccb"
 )
 
-project(protobuf-c VERSION ${PACKAGE_VERSION})
+project(protobuf-c VERSION 1.3.0)
 
 include(CPack)
 include(CTest)
@@ -21,11 +17,8 @@ option(BUILD_PROTO3 "BUILD_PROTO3" ON)
 include(TestBigEndian)
 test_big_endian(WORDS_BIGENDIAN)
 
-set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
-
 set(defs
-  PACKAGE_VERSION="${PACKAGE_VERSION}"
-  PACKAGE_STRING="${PACKAGE_STRING}"
+  PACKAGE_STRING="${PROJECT_NAME} ${PROJECT_VERSION}"
   WORDS_BIGENDIAN=${WORDS_BIGENDIAN})
 
 if(MSVC)
@@ -37,7 +30,7 @@ endif()
 add_library(protobuf-c
   protobuf-c/protobuf-c.c
   protobuf-c/protobuf-c.h)
-target_compile_definitions(protobuf-c PUBLIC ${defs})
+target_compile_definitions(protobuf-c PRIVATE ${defs})
 target_include_directories(protobuf-c PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/protobuf-c>
@@ -94,7 +87,7 @@ target_include_directories(protoc-gen-c PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/protobuf-c>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
-target_compile_definitions(protoc-gen-c PUBLIC ${defs})
+target_compile_definitions(protoc-gen-c PRIVATE ${defs})
 target_link_libraries(protoc-gen-c PUBLIC
   protobuf::libprotobuf protobuf::libprotoc)
 
