@@ -39,20 +39,6 @@ target_include_directories(protobuf-c PUBLIC
 hunter_add_package(Protobuf)
 find_package(Protobuf CONFIG REQUIRED)
 
-if(MSVC AND NOT BUILD_SHARED_LIBS)
-	# In case we are building static libraries, link also the runtime library statically
-	# so that MSVCR*.DLL is not required at runtime.
-	# https://msdn.microsoft.com/en-us/library/2kzt1wy3.aspx
-	# This is achieved by replacing msvc option /MD with /MT and /MDd with /MTd
-	# http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
-	foreach(flag_var
-		CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-		CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-	  if(${flag_var} MATCHES "/MD")
-		string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-	  endif(${flag_var} MATCHES "/MD")
-	endforeach(flag_var)
-endif()
 set(PROTOC_GEN_C_SRC
     protoc-c/c_bytes_field.cc
     protoc-c/c_bytes_field.h
